@@ -4,16 +4,23 @@ import type { Database } from "@/types/supabase";
 // ── Browser client (used in client components) ────────────────────────────────
 // Safe to call on client — anon key only, Row Level Security enforces access.
 
-const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL!;
-const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
+const supabaseUrl  = process.env.NEXT_PUBLIC_SUPABASE_URL ?? "";
+const supabaseAnon = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? "";
 
-export const supabase = createClient<Database>(supabaseUrl, supabaseAnon, {
-  auth: {
-    persistSession:    true,
-    autoRefreshToken:  true,
-    detectSessionInUrl: true,
+// createClient() throws when the URL is empty, which breaks prerendering when
+// the env vars aren't set. Fall back to inert placeholders — every call site
+// checks isSupabaseConfigured() first, so the placeholder client is never used.
+export const supabase = createClient<Database>(
+  supabaseUrl  || "https://your-project.supabase.co",
+  supabaseAnon || "your-anon-key",
+  {
+    auth: {
+      persistSession:    true,
+      autoRefreshToken:  true,
+      detectSessionInUrl: true,
+    },
   },
-});
+);
 
 // ── Is Supabase configured? ───────────────────────────────────────────────────
 // Returns false when the env vars are still placeholder values — allows
