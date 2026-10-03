@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+/* ── Design tokens ─────────────────────────────────────────────────────────── */
+:root {
+  --bg-canvas:   #EAE5DC;
+  --bg-sidebar:  #304d50;
+  --bg-card:     #F5F1EA;
+  --bg-card-alt: #FFFFFF;
+
+  --orange:      #ee8953;
+  --orange-light:#F0844E;
+  --teal:        #3D6B63;
+  --teal-light:  #5A8C82;
+  --teal-dark:   #304d50;
+
+  --text-primary:   #304d50;
+  --text-secondary: #4A5E5B;
+  --text-muted:     #7A928F;
+  --text-cream:     #F5F1EA;
+
+  --border:      #D8D2C8;
+  --border-light:#E8E4DC;
+  --font-bricolage: 'Bricolage Grotesque', 'Bricolage Grotesque Fallback';
+  --font-dm-sans:   'DM Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-space-mono:'Space Mono', 'Courier New', monospace;
+
+  /* ── PreConvara brand geometry ─────────────────────────────────────────── */
+  /* Bubble radius — matches the rounded corners of the logo mark */
+  --radius-bubble: 18px;
+  /* Soft glow used on hero sections */
+  --glow-orange: radial-gradient(ellipse 60% 50% at 50% 0%, rgba(238,137,83,0.18) 0%, transparent 70%);
+  --glow-teal:   radial-gradient(ellipse 60% 50% at 50% 100%, rgba(61,107,99,0.14) 0%, transparent 70%);
+}
+
+@theme inline {
+  --color-canvas:    var(--bg-canvas);
+  --color-sidebar:   var(--bg-sidebar);
+  --color-card:      var(--bg-card);
+  --color-orange:    var(--orange);
+  --color-teal:      var(--teal);
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────────── */
+html, body { height: 100%; }
+/* scroll-behavior is set via data-scroll-behavior="smooth" on <html> (Next.js requirement) */
+
+body {
+  background: var(--bg-canvas);
+  color: var(--text-primary);
+  /* DM Sans is the primary UI font — clean, modern, highly legible */
+  font-family: var(--font-dm-sans), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ── Font utility classes ───────────────────────────────────────────────────── */
+.font-heading {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif;
+}
+.font-body {
+  font-family: var(--font-dm-sans), sans-serif;
+}
+/* Space Mono for code blocks, monospace labels, brief metadata stamps */
+.font-mono,
+code, kbd, samp, pre {
+  font-family: var(--font-space-mono), monospace;
+}
+
+.heading-hero {
+  font-family: var(--font-bricolage), "Bricolage Grotesque", sans-serif;
+  font-size: clamp(2.6rem,6vw,4.9rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -.065em;
+  color: var(--text-primary);
+}
+.heading-hero .accent { color: var(--orange); }
+
+.label-eyebrow {
+  font-size: 0.65rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--orange);
+}
+
+/* ── Animations ────────────────────────────────────────────────────────────── */
+@keyframes fadeSlideUp {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.96) translateY(8px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.anim-fade-up {
+  animation: fadeSlideUp 0.45s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+.anim-fade-up-1 { animation: fadeSlideUp 0.45s 0.05s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-up-2 { animation: fadeSlideUp 0.45s 0.12s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-up-3 { animation: fadeSlideUp 0.45s 0.20s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-up-4 { animation: fadeSlideUp 0.45s 0.28s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-fade-in   { animation: fadeIn 0.35s ease both; }
+.anim-scale-in  { animation: scaleIn 0.3s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* ── Landing page specific animations ──────────────────────────────────────── */
+@keyframes float {
+  0%, 100% { transform: translateY(0px) rotate(0deg); }
+  33%       { transform: translateY(-12px) rotate(1deg); }
+  66%       { transform: translateY(-6px) rotate(-1deg); }
+}
+@keyframes floatSlow {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-18px); }
+}
+@keyframes drift {
+  0%, 100% { transform: translateX(0px) translateY(0px); }
+  25%       { transform: translateX(8px) translateY(-6px); }
+  75%       { transform: translateX(-6px) translateY(8px); }
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+@keyframes pulseRing {
+  0%   { transform: scale(1);    opacity: 0.6; }
+  100% { transform: scale(1.8);  opacity: 0; }
+}
+@keyframes shimmer {
+  0%   { background-position: -200% center; }
+  100% { background-position:  200% center; }
+}
+@keyframes gradientShift {
+  0%,100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+@keyframes typewriter {
+  from { width: 0; }
+  to   { width: 100%; }
+}
+@keyframes blink {
+  0%,100% { opacity: 1; }
+  50%      { opacity: 0; }
+}
+@keyframes revealLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes revealRight {
+  from { opacity: 0; transform: translateX(30px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.anim-float     { animation: float 6s ease-in-out infinite; }
+.anim-float-slow{ animation: floatSlow 8s ease-in-out infinite; }
+.anim-drift     { animation: drift 10s ease-in-out infinite; }
+.anim-marquee   { animation: marquee 25s linear infinite; }
+.anim-pulse-ring{ animation: pulseRing 2s cubic-bezier(0.2,0.6,0.4,1) infinite; }
+.anim-shimmer   {
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.4) 50%, transparent 100%);
+  background-size: 200% 100%;
+  animation: shimmer 2s infinite;
+}
+.anim-reveal-left  { animation: revealLeft  0.6s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-reveal-right { animation: revealRight 0.6s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-count-up     { animation: countUp 0.5s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* Scroll-reveal base state — JS adds .revealed class */
+.scroll-reveal {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.22,1,0.36,1), transform 0.65s cubic-bezier(0.22,1,0.36,1);
+}
+.scroll-reveal.revealed {
+  opacity: 1;
+  transform: translateY(0);
+}
+.scroll-reveal-delay-1 { transition-delay: 0.08s; }
+.scroll-reveal-delay-2 { transition-delay: 0.16s; }
+.scroll-reveal-delay-3 { transition-delay: 0.24s; }
+.scroll-reveal-delay-4 { transition-delay: 0.32s; }
+
+/* Gradient text */
+.gradient-text {
+  background: linear-gradient(135deg, var(--orange) 0%, #F0844E 40%, #E8652A 100%);
+  background-size: 200% 200%;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  animation: gradientShift 4s ease infinite;
+}
+
+.border-border, .border-border\/50 {
+  border-color: var(--border);
+}
+.hover\:border-primary\/50:hover {
+  border-color:var(--orange);
+}
+/* ── Mobile sidebar slide-in ───────────────────────────────────────────────── */
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to   { transform: translateX(0); }
+}
+@keyframes slideOutLeft {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-100%); }
+}
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+.anim-slide-in-left  { animation: slideInLeft  0.28s cubic-bezier(0.22,1,0.36,1) both; }
+.anim-slide-out-left { animation: slideOutLeft 0.22s cubic-bezier(0.4,0,1,1) both; }
+.anim-slide-in-right { animation: slideInRight 0.28s cubic-bezier(0.22,1,0.36,1) both; }
+
+/* ── Bubble card — logo-geometry inspired card shape ──────────────────────── */
+.card-bubble {
+  border-radius: var(--radius-bubble);
+  background: var(--bg-card);
+  border: 1px solid var(--border-light);
+}
+
+/* ── Hero glow overlay ────────────────────────────────────────────────────── */
+.hero-glow-orange::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--glow-orange);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Scrollbar ──────────────────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
